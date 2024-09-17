@@ -1,0 +1,200 @@
+/* Reset some default browser styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Styling */
+header {
+    background-color: #00853f;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+}
+
+header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+/* Navigation Bar Styling */
+nav {
+    background-color: #005222;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Main Section Styling */
+main {
+    padding: 20px 0;
+}
+
+main h2 {
+    color: #005222;
+    margin-bottom: 15px;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+canvas {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+/* Weather and Currency Styling */
+#weather-info, #currency-info {
+    font-size: 1.2rem;
+    color: #333;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #005222;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 30px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    main h2 {
+        font-size: 1.8rem;
+    }
+}
+
+/* News Section Styling */
+#news {
+    margin-top: 40px;
+}
+
+#news-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.news-article {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.news-article h3 a {
+    color: #00853f;
+    text-decoration: none;
+}
+
+.news-article h3 a:hover {
+    text-decoration: underline;
+}
+
+.news-article p {
+    margin-top: 10px;
+    color: #666;
+}
+
+
+
+
+/* styles.css */
+
+/* Light mode (default) */
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
+}
+
+header, nav, main, footer {
+    background-color: #f8f9fa;
+}
+
+button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+/* Dark mode */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+header.dark-mode, nav.dark-mode, main.dark-mode, footer.dark-mode {
+    background-color: #1e1e1e;
+}
+
+button.dark-mode {
+    background-color: #0056b3;
+}
+
+/* Dark mode toggle button styles */
+#dark-mode-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}

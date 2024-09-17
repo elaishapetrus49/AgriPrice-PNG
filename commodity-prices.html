@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Currency Exchange Rates - AgriPrice PNG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8; /* Light background */
+            color: #333333; /* Dark text for contrast */
+            line-height: 1.6;
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #00793C; /* Dark green header */
+            color: #ffffff;
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Logo Styling */
+        /* Logo Styling */
+.logo {
+    max-width: 200px; /* Increase the size */
+    margin: 0 auto; /* Center the logo */
+    display: block; /* Ensure it's treated as a block-level element */
+    border-radius: 50%; /* Make it round */
+}
+
+/* Header Styles */
+header {
+    background-color: #00793C; /* Dark green header */
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center; /* Center content */
+}
+
+.header-title {
+    margin-top: 15px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.2rem;
+}
+
+
+        /* Navigation Styles */
+        nav {
+            background-color: #005f2c; /* Slightly darker green for nav */
+            color: #ffffff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700; /* Gold on hover */
+        }
+
+        /* Main Content Styles */
+        main {
+            margin: 40px 0;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #005f2c; /* Darker green for headings */
+            margin-bottom: 20px;
+        }
+
+        /* Currency Table */
+        .currency-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .currency-table th,
+        .currency-table td {
+            padding: 12px 15px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+
+        .currency-table th {
+            background-color: #00793C;
+            color: #ffffff;
+        }
+
+        .currency-table tbody tr:nth-child(even) {
+            background-color: #f3f3f3;
+        }
+
+        .currency-table tbody tr:hover {
+            background-color: #e9e9e9;
+        }
+
+        /* Chart Section */
+        #currencyChart {
+            margin-top: 20px;
+        }
+/* Time Display Styles */
+.time-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        .time-item {
+            background-color: #006600;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        /* Footer Styles */
+        footer {
+            background-color: #005f2c;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="agp.png" alt="AgriPrice PNG Logo" class="logo"> <!-- Centered, round, and bigger logo -->
+            <div class="header-title">
+                <h1>AgriPrice PNG</h1>
+                <p>Helping PNG Farmers Trade at the Best Times</p>
+                <div class="time-container">
+                    <div class="time-item" id="png-time">PNG Time: Loading...</div>
+                    <div class="time-item" id="us-time">US Time: Loading...</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="commodity-prices.html">Commodity Prices</a></li>
+                <li><a href="agri-advice.html">Agricultural Advice</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <section id="currency">
+                <h2>Currency Exchange Rates (PGK)</h2>
+                <p>The table below displays the latest exchange rates for various currencies against the Papua New Guinean Kina (PGK). The exchange rate represents how much one unit of the foreign currency is worth in PGK. This information is crucial for understanding the value of foreign currencies when conducting international transactions.</p>
+                
+                <table class="currency-table">
+                    <thead>
+                        <tr>
+                            <th>Currency</th>
+                            <th>Rate (PGK)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="currency-rates">
+                        <tr>
+                            <td>USD</td>
+                            <td>3.52</td>
+                        </tr>
+                        <tr>
+                            <td>AUD</td>
+                            <td>2.45</td>
+                        </tr>
+                        <tr>
+                            <td>EUR</td>
+                            <td>4.12</td>
+                        </tr>
+                        <tr>
+                            <td>JPY</td>
+                            <td>0.032</td>
+                        </tr>
+                        <tr>
+                            <td>GBP</td>
+                            <td>5.10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <canvas id="currencyChart" width="600" height="400"></canvas>
+            </section>
+
+            <section id="analysis">
+                <h2>Best Time to Trade</h2>
+                <div id="trade-advice">
+                    <p>Loading trade analysis...</p>
+                </div>
+            </section>
+
+            <section>
+                <div id="commodity-price">Loading silver price...</div>
+
+            </section>
+            <div class="container">
+                <section id="commodity-prices">
+                    <h2>Commodity Prices</h2>
+                    <p id="commodity-info">Loading commodity prices...</p>
+                    <table class="commodity-table">
+                        <thead>
+                            <tr>
+                                <th>Commodity</th>
+                                <th>Price (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="commodity-prices-table">
+                            <!-- Dynamic content will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                    <canvas id="commodityChart" width="600" height="400"></canvas>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 AgriPrice PNG | Designed for PNG Farmers</p>
+        </div>
+    </footer>
+
+    <script>
+           
+           $(document).ready(function() {
+            // Commodity Prices Section
+            var commodities = [
+                'gold', 'silver', 'copper', 'soybean_oil', 'wheat', 'platinum', 'micro_silver', 'lean_hogs',
+                'corn', 'oat', 'aluminum', 'soybean_meal', 'soybean', 'lumber', 'live_cattle', 'sugar',
+                'natural_gas', 'crude_oil', 'orange_juice', 'coffee', 'cotton', 'micro_gold', 'feeder_cattle',
+                'rough_rice', 'palladium', 'cocoa', 'brent_crude_oil', 'gasoline_rbob', 'heating_oil',
+                'class_3_milk'
+            ]; // Full list of commodities
+            var apiKey = 'CieF5Z5zGp0IHK1Qm9W9Iw==96E5H2vrvongacHT'; // Your API key
+
+            function fetchCommodityPrices() {
+                var requests = commodities.map(function(commodity) {
+                    return $.ajax({
+                        method: 'GET',
+                        url: 'https://api.api-ninjas.com/v1/commodityprice?name=' + commodity,
+                        headers: { 'X-Api-Key': apiKey },
+                        contentType: 'application/json'
+                    });
+                });
+
+                $.when.apply($, requests).done(function() {
+                    var responses = Array.prototype.slice.call(arguments);
+                    var prices = [];
+                    var labels = [];
+
+                    responses.forEach(function(response, index) {
+                        var data = response[0];
+                        var price = data.price || 'N/A'; // Handle missing price
+                        var commodity = commodities[index];
+                        prices.push(price);
+                        labels.push(commodity.replace('_', ' ').toUpperCase()); // Replace underscore with space and capitalize
+                    });
+
+                    // Update table
+                    var tableRows = labels.map(function(label, index) {
+                        return '<tr><td>' + label + '</td><td>' + prices[index] + '</td></tr>';
+                    }).join('');
+                    $('#commodity-prices-table').html(tableRows);
+
+                    // Update chart
+                    var ctx = document.getElementById('commodityChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Commodity Price (USD)',
+                                data: prices,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }).fail(function(error) {
+                    console.error('Error fetching commodity prices:', error);
+                });
+            }
+
+            fetchCommodityPrices();
+
+            // Real-Time Clock Section
+            function updateTimes() {
+                // Port Moresby Time (PNG)
+                var portMoresbyTime = new Date().toLocaleString('en-US', { timeZone: 'Pacific/Port_Moresby', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
+                $('#png-time').text('PNG Time: ' + portMoresbyTime);
+
+                // New York Time (US)
+                var newYorkTime = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
+                $('#us-time').text('US Time: ' + newYorkTime);
+            }
+
+            updateTimes();
+            setInterval(updateTimes, 1000); // Update every second
+        });
+
+  // JavaScript for Currency Chart
+  const ctx = document.getElementById('currencyChart').getContext('2d');
+
+  // Function to extract data from the table
+  function getCurrencyData() {
+      const table = document.querySelector('.currency-table tbody');
+      const rows = table.querySelectorAll('tr');
+      let currencies = [];
+      let rates = [];
+
+      rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          currencies.push(cells[0].innerText);
+          rates.push(parseFloat(cells[1].innerText));
+      });
+
+      return { currencies, rates };
+  }
+
+  const currencyData = getCurrencyData();
+
+  const currencyChart = new Chart(ctx, {
+      type: 'bar', // Bar chart
+      data: {
+          labels: currencyData.currencies, // Currency names
+          datasets: [{
+              label: 'Currency Rate (PGK)',
+              data: currencyData.rates, // Currency rates
+              backgroundColor: [
+                  'rgba(0, 93, 0, 0.8)',
+                  'rgba(0, 150, 0, 0.8)',
+                  'rgba(0, 93, 0, 0.6)',
+                  'rgba(0, 150, 0, 0.6)',
+                  'rgba(0, 93, 0, 0.4)'
+              ],
+              borderColor: [
+                  'rgba(0, 93, 0, 1)',
+                  'rgba(0, 150, 0, 1)',
+                  'rgba(0, 93, 0, 1)',
+                  'rgba(0, 150, 0, 1)',
+                  'rgba(0, 93, 0, 1)'
+              ],
+              borderWidth: 2
+          }]
+      },
+      options: {
+          scales: {
+              x: {
+                  title: {
+                      display: true,
+                      text: 'Currency'
+                  },
+                  grid: {
+                      color: '#e0e0e0'
+                  }
+              },
+              y: {
+                  title: {
+                      display: true,
+                      text: 'Exchange Rate (PGK)'
+                  },
+                  grid: {
+                      color: '#e0e0e0'
+                  }
+              }
+          }
+      }
+  });
+
+    </script>
+    
+</body>
+</html>

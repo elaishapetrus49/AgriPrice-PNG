@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Commodity Prices - AgriPrice PNG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .currency-table, .commodity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .currency-table th, .currency-table td, .commodity-table th, .commodity-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        .currency-table th, .commodity-table th {
+            background-color: #28a745;
+            color: white;
+        }
+        .currency-table td, .commodity-table td {
+            background-color: #f8f9fa;
+        }
+        .currency-table td i, .commodity-table td i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-success text-white text-center py-4">
+        <div class="container">
+            <img src="agp.png" alt="AgriPrice PNG Logo" class="logo img-fluid rounded-circle mx-auto d-block mb-3" style="max-width: 150px;">
+            <h1>AgriPrice PNG</h1>
+            <p>Helping PNG Farmers Trade at the Best Times</p>
+            <div class="d-flex justify-content-center mt-3">
+                <div class="badge bg-dark me-3 p-3" id="png-time">PNG Time: Loading...</div>
+                <div class="badge bg-dark p-3" id="us-time">US Time: Loading...</div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">AgriPrice PNG</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="commodity-prices.html">Commodity Prices</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="agri-advice.html">Agricultural Advice</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <section id="currency">
+            <h2>Currency Exchange Rates (PGK)</h2>
+            <p>The table below displays the latest exchange rates for various currencies against the Papua New Guinean Kina (PGK). This information is crucial for understanding the value of foreign currencies when conducting international transactions.</p>
+            
+            <table class="currency-table">
+                <thead>
+                    <tr>
+                        <th>Currency</th>
+                        <th>Rate (PGK)</th>
+                    </tr>
+                </thead>
+                <tbody id="currency-rates">
+                    <!-- Data will be dynamically inserted here -->
+                </tbody>
+            </table>
+
+            <canvas id="currencyChart" width="600" height="400"></canvas>
+        </section>
+
+        <section id="commodity-prices" class="mt-5">
+            <h2 class="text-success mb-4">Commodity Prices</h2>
+            <p id="commodity-info">Loading commodity prices...</p>
+            <table class="commodity-table">
+                <thead>
+                    <tr>
+                        <th>Commodity</th>
+                        <th>Price (USD)</th>
+                    </tr>
+                </thead>
+                <tbody id="commodity-prices-table">
+                    <!-- Dynamic content will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <canvas id="commodityChart" width="600" height="400"></canvas>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p>&copy; 2024 AgriPrice PNG | Designed for PNG Farmers</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Your API keys
+            var commodityApiKey = 'CieF5Z5zGp0IHK1Qm9W9Iw==96E5H2vrvongacHT';
+            var currencies = ['USD', 'EUR', 'GBP', 'AUD', 'JPY'];
+            var commodities = [
+                { name: 'gold', icon: 'fa-coins' }, { name: 'silver', icon: 'fa-coins' }, { name: 'copper', icon: 'fa-cogs' },
+                { name: 'soybean_oil', icon: 'fa-seedling' }, { name: 'wheat', icon: 'fa-seedling' }, { name: 'platinum', icon: 'fa-gem' },
+                { name: 'micro_silver', icon: 'fa-coins' }, { name: 'lean_hogs', icon: 'fa-piggy-bank' }, { name: 'corn', icon: 'fa-corn' },
+                { name: 'oat', icon: 'fa-corn' }, { name: 'aluminum', icon: 'fa-cogs' }, { name: 'soybean_meal', icon: 'fa-seedling' },
+                { name: 'soybean', icon: 'fa-seedling' }, { name: 'lumber', icon: 'fa-tree' }, { name: 'live_cattle', icon: 'fa-piggy-bank' },
+                { name: 'sugar', icon: 'fa-cube' }, { name: 'natural_gas', icon: 'fa-gas-pump' }, { name: 'crude_oil', icon: 'fa-oil-can' },
+                { name: 'orange_juice', icon: 'fa-citrus' }, { name: 'coffee', icon: 'fa-coffee' }, { name: 'cotton', icon: 'fa-tshirt' },
+                { name: 'micro_gold', icon: 'fa-gem' }, { name: 'feeder_cattle', icon: 'fa-piggy-bank' }, { name: 'rough_rice', icon: 'fa-seedling' },
+                { name: 'palladium', icon: 'fa-gem' }, { name: 'cocoa', icon: 'fa-candy-cane' }, { name: 'brent_crude_oil', icon: 'fa-oil-can' },
+                { name: 'gasoline_rbob', icon: 'fa-gas-pump' }, { name: 'heating_oil', icon: 'fa-oil-can' }, { name: 'class_3_milk', icon: 'fa-milk' }
+            ];
+
+            // Function to fetch commodity prices
+            function fetchCommodityPrices() {
+                var requests = commodities.map(function(commodity) {
+                    return $.ajax({
+                        method: 'GET',
+                        url: 'https://api.api-ninjas.com/v1/commodityprice?name=' + commodity.name,
+                        headers: { 'X-Api-Key': commodityApiKey },
+                        contentType: 'application/json'
+                    });
+                });
+
+                $.when.apply($, requests).done(function() {
+                    var responses = Array.prototype.slice.call(arguments);
+                    var prices = [];
+                    var labels = [];
+
+                    responses.forEach(function(response, index) {
+                        var data = response[0];
+                        var price = data.price || 'N/A'; // Handle missing price
+                        var commodity = commodities[index];
+                        prices.push(price);
+                        labels.push(`<i class="fas ${commodity.icon}"></i> ${commodity.name}`);
+                    });
+
+                    $('#commodity-prices-table').empty();
+                    prices.forEach(function(price, index) {
+                        $('#commodity-prices-table').append(
+                            `<tr>
+                                <td>${labels[index]}</td>
+                                <td>$${price}</td>
+                            </tr>`
+                        );
+                    });
+
+                    // Initialize Chart.js for commodity prices
+                    new Chart(document.getElementById('commodityChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Commodity Prices',
+                                data: prices,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Fetch and display commodity prices
+            fetchCommodityPrices();
+
+            // Function to fetch currency exchange rates
+            function fetchCurrencyExchangeRates() {
+                $.ajax({
+                    method: 'GET',
+                    url: 'https://api.exchangerate-api.com/v4/latest/PGK',
+                    contentType: 'application/json'
+                }).done(function(response) {
+                    var rates = response.rates;
+                    var currencyData = currencies.map(function(currency) {
+                        return { currency: currency, rate: rates[currency] };
+                    });
+
+                    $('#currency-rates').empty();
+                    currencyData.forEach(function(data) {
+                        $('#currency-rates').append(
+                            `<tr>
+                                <td>${data.currency}</td>
+                                <td>${data.rate.toFixed(2)}</td>
+                            </tr>`
+                        );
+                    });
+
+                    // Initialize Chart.js for currency rates
+                    new Chart(document.getElementById('currencyChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: currencies,
+                            datasets: [{
+                                label: 'Currency Exchange Rates (PGK)',
+                                data: currencies.map(function(currency) { return rates[currency]; }),
+                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Fetch and display currency exchange rates
+            fetchCurrencyExchangeRates();
+
+            // Function to update time
+            function updateTime() {
+                var now = new Date();
+                var pngTime = new Date(now.toLocaleString("en-US", { timeZone: "Pacific/Port_Moresby" }));
+                var usTime = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+                $('#png-time').text('PNG Time: ' + pngTime.toLocaleString());
+                $('#us-time').text('US Time: ' + usTime.toLocaleString());
+            }
+
+            // Update time every second
+            setInterval(updateTime, 1000);
+        });
+        // Fetch and display real-time currency exchange rates
+        async function fetchCurrencyRates() {
+            const response = await fetch('https://api.exchangerate-api.com/v4/latest/PGK'); // Replace with actual API endpoint
+            const data = await response.json();
+            const rates = data.rates;
+            const currencyRatesTable = document.getElementById('currency-rates');
+
+            currencyRatesTable.innerHTML = '';
+            for (const [currency, rate] of Object.entries(rates)) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${currency}</td><td>${rate.toFixed(2)}</td>`;
+                currencyRatesTable.appendChild(row);
+            }
+        }
+
+        // Initialize Chart.js for currency chart
+        async function initializeCurrencyChart() {
+            const ctx = document.getElementById('currencyChart').getContext('2d');
+            const response = await fetch('https://api.example.com/currency-chart-data'); // Replace with actual API endpoint
+            const data = await response.json();
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: 'Currency Rate',
+                        data: data.rates,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Initialize page data
+        function initializePage() {
+            fetchCurrencyRates();
+            initializeCurrencyChart();
+            // Fetch and display data for other sections similarly
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
